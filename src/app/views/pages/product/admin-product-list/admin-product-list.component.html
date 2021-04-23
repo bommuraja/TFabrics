@@ -1,0 +1,103 @@
+<br />
+<div class="container">
+  <!-- <div class="row" *ngIf="authService.isAdmin$ | async"> -->
+    <div class="row">
+    
+    <div class="col-md-4">
+     </div>
+    <div class="col-md-4"> <div class="form-group">
+      <select
+        class="form-control"
+        name=""
+        id="brand_select"
+        [(ngModel)]="selectedBrand"
+      >
+        <option *ngFor="let brand of brands" [ngValue]="brand">{{
+          brand
+        }}</option>
+      </select>
+    </div></div>
+    <div class="col-md-4 search-hero">
+      <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="&#61442;  Start searching for a hero by id or name or country">
+    </div>
+  </div>
+  <div class="row">
+    
+    <div class="col-md-12">
+      <div class="container">
+        
+        <app-card-loader
+          [loop]="3"
+          [height]="800"
+          *ngIf="loading"
+        ></app-card-loader>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">First</th>
+              <th scope="col">Last</th>
+              <th scope="col">Handle</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="!loading" >
+            <tr *ngFor="
+            let product of productList
+              | filterByBrand: selectedBrand 
+              | filter:searchText           
+              | paginate: { itemsPerPage: 6, currentPage: page }
+          ">
+              <th scope="row">1</th>
+              <td>{{ product.productCategory }}</td>
+              <td>{{ product.productName }}</td>
+              <td>{{ product.productPrice }}</td>
+              <td>
+                <a
+                          placement="top"
+                          mdbTooltip="Add Product"
+                          container="body"
+                          data-toggle="modal"
+                          data-target="#exampleModalLong"
+                        >
+                          <i class="fa fa-plus"></i>
+                        </a>
+                        |
+                        <a
+                        placement="top"
+                        mdbTooltip="Edit Product"
+                        container="body"
+                        (click)="editProduct(product)"
+                      >
+                        <i class="fa fa-edit"></i>
+                        
+                      </a>
+                      |
+                        <a
+                        placement="top"
+                        mdbTooltip="Remove Product"
+                        container="body"
+                        (click)="removeProduct(product.$key)"
+                      >
+                        <i class="fa fa-trash"></i>
+                        
+                      </a>
+              </td>
+            </tr>
+           
+          </tbody>
+        </table>        
+       
+        <!-- Pagination -->
+        <div class="text-center mt-3">
+          <pagination-controls
+            (pageChange)="page = $event"
+          ></pagination-controls>
+        </div>
+      </div>
+      <!--/.Card-->
+    </div>
+  </div>
+</div>
+<app-add-product></app-add-product>
+<app-edit-product></app-edit-product>
